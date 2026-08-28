@@ -33,7 +33,7 @@ test('@claim:route-metadata gives each route complete social metadata', async ({
   }
 });
 
-test('@claim:recorded-web-report shows a real CLI recording', async ({ page }) => {
+test('recorded web report shows a real CLI recording', async ({ page }) => {
   await page.goto('/demo/');
   await expect(page.getByRole('heading', { name: /Recorded switchboard demo run/i })).toBeVisible();
   await expect(page.getByRole('img', { name: /Recorded terminal run of switchboard demo/i })).toBeVisible();

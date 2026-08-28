@@ -69,10 +69,26 @@ check('cli-output-contract', () => {
 });
 
 check('comparison-policy', () => {
-  const { report } = reportFromDemo();
-  assert.deepEqual(report.comparison, { schema: 'strict', order: 'strict', nulls: 'nan_equal', timezone: 'utc', float_abs: 1e-9, float_rel: 1e-7 });
-  const source = readFileSync(join(root, 'crates/switchboard/src/config.rs'), 'utf8');
-  for (const option of ['Strict,', 'Compatible,', 'Ignore,', 'NanEqual,', 'Utc,']) assert.match(source, new RegExp(option));
+  const dir = mkdtempSync(join(tmpdir(), 'switchboard-policy-'));
+  try {
+    const assessment = join(dir, 'assessment');
+    mkdirSync(join(assessment, 'fixtures'), { recursive: true });
+    copyFileSync(join(root, 'examples/seeded/transform.py'), join(assessment, 'transform.py'));
+    copyFileSync(join(root, 'examples/seeded/fixtures/orders.csv'), join(assessment, 'fixtures/orders.csv'));
+    const base = readFileSync(join(root, 'examples/seeded/switchboard.toml'), 'utf8').replace('python = "python3"', `python = ${JSON.stringify(python)}`);
+    for (const expected of [
+      { schema: 'strict', order: 'strict', nulls: 'nan_equal', timezone: 'utc', float_abs: 1e-9, float_rel: 1e-7 },
+      { schema: 'compatible', order: 'ignore', nulls: 'strict', timezone: 'ignore', float_abs: 0.25, float_rel: 0.5 },
+      { schema: 'ignore', order: 'strict', nulls: 'nan_equal', timezone: 'strict', float_abs: 0, float_rel: 0 }
+    ]) {
+      const text = base.replace(/schema = "[^"]+"/, `schema = "${expected.schema}"`).replace(/order = "[^"]+"/, `order = "${expected.order}"`).replace(/nulls = "[^"]+"/, `nulls = "${expected.nulls}"`).replace(/timezone = "[^"]+"/, `timezone = "${expected.timezone}"`).replace(/float_abs = [^\n]+/, `float_abs = ${expected.float_abs}`).replace(/float_rel = [^\n]+/, `float_rel = ${expected.float_rel}`);
+      const config = join(assessment, 'switchboard.toml');
+      writeFileSync(config, text);
+      const result = run(['assess', config, '--json'], { cwd: dir });
+      assert.ok([0, 2].includes(result.status), result.stderr);
+      assert.deepEqual(JSON.parse(result.stdout).comparison, expected);
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
 check('fixture-bound-before-import', () => {
