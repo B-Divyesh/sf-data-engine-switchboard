@@ -1,4 +1,26 @@
-# Data Engine Switchboard — polish 2 handoff
+# Data Engine Switchboard — review 3 handoff
+
+Work order: `data-engine-switchboard-review-3`
+Reviewed commit: `861274e0eb907cd0b014173be2e863f816877a9e`
+
+## Review 3 result
+
+- Performed an independent, no-product-code-change review of the live site at 390px and desktop, the demo sandbox, CLI demo, every registered claim, routes, metadata, links, accessibility, copy, and review history.
+- Wrote `.factory/review-3.md` with evidence and the complete finding map.
+- Fresh clone `/tmp/des-review3-clean-T0DcUT`: `npm ci`, every registered claim command, `npm test`, and `npm run build` passed. The build produced `dist/bin/switchboard` and `dist/site/`.
+- A temp-directory CLI demo exited 2 as expected, found value/schema/row-order differences, wrote its report in its own temp child, and separated its streaming warning.
+- Live route, link, metadata, Back/focus, 390px navigation, same-origin request, and Axe checks passed.
+
+## Current known gaps
+
+Review verdict: **FAIL**.
+
+1. `/terms/` promises reports contain code, environment, and installed library versions; the JSON report does not.
+2. `/privacy/` says the tool reads only declared files, but arbitrary user-supplied Python transformations can read any file available to their process.
+
+See `.factory/review-3.md` for exact quotes and concrete fixes.
+
+## Previous polish 2 handoff (historical)
 
 Work order: `data-engine-switchboard-polish-2`
 
@@ -47,6 +69,6 @@ cargo run --manifest-path crates/switchboard/Cargo.toml -- demo
 
 For the web sandbox, open `/demo/` or `/?demo=1`.
 
-## Known gaps
+## Known gaps at polish 2 (historical)
 
 None. The paid feature remains intentionally absent because no production checkout is registered.
