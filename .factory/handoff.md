@@ -1,7 +1,8 @@
 # Data Engine Switchboard — polish 1 handoff
 
 Work order: `data-engine-switchboard-polish-1`  
-Base reviewed: `af81ae87e6baa63bef8e963c905953d9a7aff46f`
+Base reviewed: `af81ae87e6baa63bef8e963c905953d9a7aff46f`  
+Repair commits: `bda90edd359acfca0b380aac2baf208026fdb1a3`, `e90187b`
 
 ## Delivered
 
@@ -34,7 +35,7 @@ Deploy static output with:
 /opt/fleet/lib/deploy-static.sh data-engine-switchboard dist/site
 ```
 
-Then run `/opt/fleet/lib/verify-url.sh https://data-engine-switchboard.sociobot.in/ <evidence-dir>`, inspect `/demo/`, `/privacy/`, `/terms/`, unknown-route 404, and `curl -I` for CSP. Live evidence and final commit SHA are appended after deployment.
+Deployment completed through `/opt/fleet/lib/deploy-static.sh data-engine-switchboard dist/site` on 28 August 2026. Live checks passed at `https://data-engine-switchboard.sociobot.in/`: `verify-url.sh` output and screenshots are in `/tmp/des-polish-1-evidence-final/`; live Playwright Axe returned 0 violations for `/`, `/demo/`, `/privacy/`, and `/terms/`; `/missing-review-route` returned HTTP 404 with the product-owned page; `curl -I /` returned the restrictive CSP.
 
 ## Known gaps
 
