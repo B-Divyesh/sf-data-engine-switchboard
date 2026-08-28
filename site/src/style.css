@@ -123,8 +123,11 @@ h1 em { color: var(--moss); font-style: normal; }
 .demo-banner button, .demo-banner a { min-height: 40px; display: inline-flex; align-items: center; padding: 8px 10px; border: 2px solid var(--ink); background: var(--ground); color: var(--ink); font: inherit; text-decoration: none; cursor: pointer; }
 .demo-page { min-height: calc(100vh - 240px); max-width: 980px; padding: clamp(56px, 8vw, 120px) clamp(24px, 12vw, 160px); }
 .demo-page h1 { font-size: clamp(48px, 7vw, 84px); }
-.demo-report, .demo-command { margin-top: 44px; padding: 28px; border: 3px solid var(--ink); background: var(--surface); box-shadow: 7px 7px 0 var(--moss); }
-.demo-report h2, .demo-command h2 { font-size: 28px; text-transform: uppercase; }
+.demo-report, .demo-command, .demo-recording { margin-top: 44px; padding: 28px; border: 3px solid var(--ink); background: var(--surface); box-shadow: 7px 7px 0 var(--moss); }
+.demo-report h2, .demo-command h2, .demo-recording h2 { font-size: 28px; text-transform: uppercase; }
+.demo-recording figure { margin: 24px 0 0; background: var(--ink); border: 2px solid var(--ink); }
+.demo-recording img { width: 100%; height: auto; }
+.demo-recording figcaption { padding: 14px 16px; color: #d3d8d2; font: 12px/1.5 var(--mono); }
 .demo-report strong { color: var(--rust); }
 
 .license-section { display: grid; grid-template-columns: 1fr minmax(340px, .72fr); gap: clamp(48px, 8vw, 120px); align-items: center; }
@@ -169,10 +172,10 @@ footer a { display: inline-flex; min-height: 44px; align-items: center; }
 
 @media (max-width: 650px) {
   body { font-size: 16px; }
-  .site-header { min-height: 64px; }
-  .wordmark { padding: 0 18px; border-right: 0; }
-  .site-header nav { overflow-x: auto; max-width: calc(100vw - 145px); }
-  .site-header nav a { min-width: 72px; padding: 0 12px; font-size: 10px; }
+  .site-header { min-height: 112px; display: grid; grid-template-columns: 1fr; }
+  .wordmark { min-height: 56px; padding: 0 18px; border-right: 0; border-bottom: 1px solid var(--edge); }
+  .site-header nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; max-width: none; }
+  .site-header nav a { min-width: 0; min-height: 48px; padding: 0 4px; font-size: 9px; letter-spacing: .025em; white-space: nowrap; }
   .hero { min-height: auto; }
   .hero-copy { padding: 64px 24px; }
   h1 { font-size: clamp(48px, 15vw, 68px); }

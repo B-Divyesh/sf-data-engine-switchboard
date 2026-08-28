@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="780" viewBox="0 0 1120 780" role="img" aria-labelledby="title desc">
+  <title id="title">Recorded switchboard demo terminal run</title>
+  <desc id="desc">A Linux terminal capture of switchboard demo. It reports NO-GO, three failures labelled Value, Schema, and Order, runtime and peak RSS measurements, and one global_sort streaming-plan warning.</desc>
+  <rect width="1120" height="780" fill="#182019"/>
+  <rect x="0" y="0" width="1120" height="48" fill="#ddd8c8"/>
+  <circle cx="28" cy="24" r="7" fill="#9a3f2e"/><circle cx="52" cy="24" r="7" fill="#785700"/><circle cx="76" cy="24" r="7" fill="#315c35"/>
+  <text x="104" y="29" fill="#182019" font-family="ui-monospace, monospace" font-size="15" font-weight="700">recorded local terminal · Linux / Python 3.12 / Pandas 3.0.5 / Polars 1.44.1</text>
+  <g font-family="ui-monospace, monospace" font-size="16" fill="#f2efe5">
+    <text x="32" y="84" fill="#d7f45b">$ switchboard demo</text>
+    <text x="32" y="118" font-weight="700">DATA ENGINE SWITCHBOARD // 0.1.0</text>
+    <text x="32" y="146">════════════════════════════════════════════════════════════</text>
+    <text x="32" y="176" fill="#ff9987" font-weight="700">DECISION  NO-GO    0 passed / 3 failed</text>
+    <text x="32" y="204" fill="#cbd1ca">Measured facts determine the decision. Heuristics only request review.</text>
+    <text x="32" y="252" fill="#ff9987" font-weight="700">[FAIL] tax rounding changes a value</text>
+    <text x="48" y="278">rows     pandas 3 │ polars 3</text>
+    <text x="48" y="304">runtime  pandas 5.82ms median │ polars 4.63ms median</text>
+    <text x="48" y="330">peak RSS pandas 127.62 MB median │ polars 54.21 MB median</text>
+    <text x="48" y="356" fill="#ff9987">! Value: values differ at rows 1–3, column 2</text>
+    <text x="32" y="404" fill="#ff9987" font-weight="700">[FAIL] identifier changes schema</text>
+    <text x="48" y="430">runtime  pandas 4.90ms median │ polars 4.21ms median</text>
+    <text x="48" y="456">peak RSS pandas 127.20 MB median │ polars 53.73 MB median</text>
+    <text x="48" y="482" fill="#ff9987">! Schema: dtype mismatch (order_id: int64 vs UInt64)</text>
+    <text x="32" y="530" fill="#ff9987" font-weight="700">[FAIL] sort direction changes order</text>
+    <text x="48" y="556">runtime  pandas 5.37ms median │ polars 4.73ms median</text>
+    <text x="48" y="582">peak RSS pandas 127.51 MB median │ polars 53.78 MB median</text>
+    <text x="48" y="608" fill="#ff9987">! Order: the same rows were emitted in a different order</text>
+    <text x="48" y="634" fill="#f0ce72">? global_sort: A sort marker appears in the explain plan.</text>
+    <text x="32" y="684" fill="#f0ce72">REVIEW    1 streaming-plan heuristic flag; inspect JSON for caveats.</text>
+    <text x="32" y="718" fill="#d7f45b">LOCAL     No fixture data was uploaded.</text>
+    <text x="32" y="752" fill="#cbd1ca">REPORT    /tmp/data-engine-switchboard-demo-…/switchboard-report.json</text>
+  </g>
+</svg>

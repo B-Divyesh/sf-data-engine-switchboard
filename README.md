@@ -2,7 +2,7 @@
 
 Data Engine Switchboard checks a Pandas-to-Polars migration from the command line. It is for Python engineers who need evidence before changing a dataframe engine.
 
-It runs matching transforms against a local, redacted fixture. The report lists value, type, row-order, time, memory, and streaming warnings.
+It runs matching transforms against a local, redacted fixture. The report lists value, schema, row-order, time, memory, and streaming warnings.
 
 ## Try the bundled sample
 
@@ -13,7 +13,9 @@ python3 -m pip install -r examples/seeded/requirements.txt
 cargo run --manifest-path crates/switchboard/Cargo.toml -- demo
 ```
 
-The command creates a new temporary directory and prints its report path. The bundled fixture deliberately reports one value difference, one type difference, and one row-order difference. Its exit code is `2` because that sample is a no-go.
+The command creates a new temporary directory and prints its report path. The bundled fixture reports value, schema, and row-order differences. Its exit code is `2` because that sample is a no-go.
+
+The site includes a self-hosted recording of this bundled command. Runtime and memory values in the recording vary by machine.
 
 ## Install and use
 
@@ -52,7 +54,7 @@ Fixtures must be regular `.csv` or `.parquet` files. Set `max_fixture_mb` from 1
 
 It rejects an oversized fixture before importing the transformation module.
 
-Choose strict, compatible, or ignored type checks. Choose strict or ignored row order. Set null, timezone, and float comparison rules in the TOML file.
+Choose strict, compatible, or ignored schema checks. Choose strict or ignored row order. Set null, timezone, and float comparison rules in the TOML file.
 
 Measured output differences decide the result. A streaming warning comes from the Polars execution plan. It asks for review and cannot turn a measured failure into a pass.
 
@@ -60,7 +62,7 @@ Measured output differences decide the result. A streaming warning comes from th
 
 Dataframe execution and report generation run locally. The CLI has no telemetry and does not upload fixtures, reports, or transformation code.
 
-The documentation site has no analytics or payment flow. Its one-click demo uses only a `demo:` browser-storage key and never reads a real-user storage key. See the site’s `/privacy/` and `/terms/` pages.
+The documentation site has no analytics or third-party requests. Its one-click demo uses only a `demo:` browser-storage key and never reads a real-user storage key. See the site’s `/privacy/` and `/terms/` pages.
 
 ## Development
 
