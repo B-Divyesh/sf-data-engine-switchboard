@@ -23,7 +23,7 @@ npm run build
 cargo package --manifest-path crates/switchboard/Cargo.toml --locked
 ```
 
-`npm test` passed locally: Rust formatting/Clippy, 8 Rust tests, 1 Vitest test, all 3 CLI claim tests, and 8 Playwright desktop/mobile tests. `npm run build` passed and produced `dist/bin/switchboard` and `dist/site/`. The built initial JS is 3.44 kB raw and CSS is 15.48 kB raw. `cargo package` must run after committing because Cargo refuses a dirty package tree.
+`npm test` passed locally and again from fresh clone `/tmp/des-clean-PeQW7V`: Rust formatting/Clippy, 8 Rust tests, 1 Vitest test, all 3 CLI claim tests, and 8 Playwright desktop/mobile tests. `npm run build` passed and produced `dist/bin/switchboard` and `dist/site/`. The built initial JS is 3.44 kB raw and CSS is 15.48 kB raw. `cargo package` passed at repair commit `bda90ed` (before the documentation-only follow-ups).
 
 Claim commands are in `.factory/claims.json`; each was run through `npm test`. The CLI claim suite creates `.test-venv` from the checked-in requirements when needed, so it also works in a clean clone.
 
