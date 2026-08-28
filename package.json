@@ -10,6 +10,7 @@
     "test:cli": "cargo fmt --all -- --check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace",
     "test:site": "vitest run --config site/vitest.config.ts",
     "test:e2e": "playwright test",
+    "test:live": "node tests/live-check.mjs",
     "test:claims": "test -x .test-venv/bin/python || (python3 -m venv .test-venv && .test-venv/bin/pip install -r examples/seeded/requirements.txt); node tests/cli-claims.mjs",
     "test:claim": "test -x .test-venv/bin/python || (python3 -m venv .test-venv && .test-venv/bin/pip install -r examples/seeded/requirements.txt); node tests/cli-claims.mjs",
     "build": "npm run build:cli && npm run build:site",

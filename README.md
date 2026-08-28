@@ -76,6 +76,13 @@ npm run build
 
 Run `cargo package --manifest-path crates/switchboard/Cargo.toml --locked` to check the publishable crate without publishing it.
 
+## Deploy the site
+
+```sh
+npm run build:site
+/opt/fleet/lib/deploy-static.sh data-engine-switchboard dist/site
+```
+
 ## License
 
 MIT. See [LICENSE](LICENSE).

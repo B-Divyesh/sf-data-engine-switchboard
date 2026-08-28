@@ -1,74 +1,104 @@
-# Data Engine Switchboard — review 3 handoff
+# Data Engine Switchboard — polish 3 handoff
 
-Work order: `data-engine-switchboard-review-3`
-Reviewed commit: `861274e0eb907cd0b014173be2e863f816877a9e`
+Work order: `data-engine-switchboard-polish-3`
 
-## Review 3 result
+Released candidate: `861274e0eb907cd0b014173be2e863f816877a9e`
 
-- Performed an independent, no-product-code-change review of the live site at 390px and desktop, the demo sandbox, CLI demo, every registered claim, routes, metadata, links, accessibility, copy, and review history.
-- Wrote `.factory/review-3.md` with evidence and the complete finding map.
-- Fresh clone `/tmp/des-review3-clean-T0DcUT`: `npm ci`, every registered claim command, `npm test`, and `npm run build` passed. The build produced `dist/bin/switchboard` and `dist/site/`.
-- A temp-directory CLI demo exited 2 as expected, found value/schema/row-order differences, wrote its report in its own temp child, and separated its streaming warning.
-- Live route, link, metadata, Back/focus, 390px navigation, same-origin request, and Axe checks passed.
+Adversarial review: `78cabd32146f0e03b16679272ddaddfe2dd9005e`
 
-## Current known gaps
+Repair commits: `39dffbe4888f53aab97e3557ce4aa9dec5250288`, `f845746745a331620f05e61011f69b4c9191dbf4`
 
-Review verdict: **FAIL**.
-
-1. `/terms/` promises reports contain code, environment, and installed library versions; the JSON report does not.
-2. `/privacy/` says the tool reads only declared files, but arbitrary user-supplied Python transformations can read any file available to their process.
-
-See `.factory/review-3.md` for exact quotes and concrete fixes.
-
-## Previous polish 2 handoff (historical)
-
-Work order: `data-engine-switchboard-polish-2`
-
-Base reviewed: `a49c54d1ed291b1e237e656d2e84ec9037c103cb`
-Repair commits: `3321675bfe61097b19028c163f0c4c5af39e7890`, `24618ee6f7c8e68c8e1fdb044c1bec9a31274b56`
+Live URL: <https://data-engine-switchboard.sociobot.in/>
 
 ## Delivered
 
-- Added a self-hosted, original SVG terminal recording of the real bundled `switchboard demo` command. It is displayed on `/demo/` beside the same command and a plain-text summary.
-- Kept direct `/demo/` and `?demo=1` isolation with the persistent sample-data banner, reset, and real-mode exit.
-- Expanded the claim registry to nine observable, clean-sandbox contracts. CLI privacy is now exercised with network sockets denied across the CLI process tree.
-- Completed social metadata for legal and 404 routes, reflowed the 390px navigation to expose all four labels, and standardized visitor wording on “schema difference”.
-- Preserved the concrete-and-moss visual system. Catalog description is a verb-first 70-character sentence.
+- Corrected Terms to state the report’s real scope: configured fixture and comparison results, without code identity, Python details, or dataframe library versions.
+- Corrected Privacy to disclose that supplied transformation code retains its Python process file access. The no-upload promise now refers to Switchboard itself.
+- Added `report-scope` and `transformation-file-access` claims. The latter runs supplied code that reads an undeclared sentinel file.
+- Strengthened `cli-local-only`: its injected process-tree guard writes a marker on any socket attempt, then asserts no marker exists.
+- Strengthened the one-click demo test: it starts from the first-screen action, checks direct `?demo=1`, preserves a real-data sentinel, resets, exits, and confirms demo data is discarded.
+- “Start for real” now clears the `demo:` namespace before returning home.
+- Expanded route tests for exact titles, canonicals, descriptions, per-route Axe scans, overflow, reduced motion, focus, Back, and phone action placement.
+- Added a real privacy contact link, visibly marked external, and retained the concrete switch-room/moss identity.
+- Updated the catalog description to: “Check Pandas-to-Polars migrations with bounded local fixtures and JSON go/no-go reports.”
+- Updated `.factory/copy-audit.md`, `.factory/demo.md`, and the exhaustive `.factory/polish-3.md` finding map.
 
-## Verification
+## Clean-clone verification
 
-Local repository:
+Fresh clone: `/tmp/data-engine-switchboard-polish3-clean-QVqfjs` at `39dffbe4888f53aab97e3557ce4aa9dec5250288`; `npm ci` completed with zero audit vulnerabilities.
+
+Every command listed in `.factory/claims.json` ran individually and passed: 11/11. This includes three browser claims at desktop and 390 px and eight fresh-temp CLI claims.
+
+The complete gate also passed:
 
 ```sh
 npm test
 npm run build
 cargo package --manifest-path crates/switchboard/Cargo.toml --locked
+npm audit --audit-level=high
 ```
 
-All passed. The release build produced `dist/bin/switchboard` and `dist/site/`. `cargo package` verified a 17.5 KiB compressed crate.
+Results:
 
-Fresh clone evidence: `/tmp/data-engine-switchboard-polish2-final-clean` was cloned from final pushed `main`. `npm ci` passed, then `npm run test:claims` passed all six CLI claim IDs and `npx playwright test --grep @claim:` passed all browser claim checks at desktop and 390px.
+- Rust: format, Clippy with warnings denied, and 8 unit tests passed.
+- Site unit tests: 1 passed.
+- Playwright: 16 passed across desktop Chrome and a 390×844 phone viewport.
+- Axe: zero violations on `/`, `/demo/`, `/privacy/`, `/terms/`, and `/404.html` at both viewports.
+- Build: `dist/bin/switchboard` is 2,027,040 bytes. Site JS is 3,561 bytes raw / 1.56 kB gzip; CSS is 15,969 bytes raw / 4.27 kB gzip.
+- Package: 18 files, 60.0 KiB unpacked / 17.5 KiB compressed.
+- Audit: zero vulnerabilities.
+- Offline/privacy exercise: the CLI completed its bundled demo with AF_INET/AF_INET6 denied throughout the process tree and made zero recorded socket attempts. The site makes only same-origin requests. No browser offline promise is published.
 
-Claim IDs: `demo-sandbox`, `recorded-cli-demo`, `report-evidence`, `cli-output-contract`, `comparison-policy`, `fixture-bound-before-import`, `cli-local-only`, `site-no-analytics`, and `route-metadata` all pass. See `.factory/claims.json` for their exact commands and sandbox definitions.
+## Performance and accessibility evidence
 
-Deployment: uploaded through `/opt/fleet/lib/deploy-static.sh data-engine-switchboard dist/site`; Azure deployment ID `b1c1a5f8-e58d-4547-b681-a7e54332937d` succeeded.
+Local mobile Lighthouse: performance 99, accessibility 100, best practices 100, SEO 100; LCP 2.3 s, CLS 0, TBT 0 ms. The initial JS, CSS, font, and hero budgets all pass; the product downloads no web font. Full JSON: `.factory/evidence/polish-3-local/lighthouse.json`.
 
-Cold live checks on <https://data-engine-switchboard.sociobot.in/>:
+Local visual evidence:
 
-- `/opt/fleet/lib/verify-url.sh` passed: 200, 583ms load, title, `lang=en`, one H1, main landmark, all images with alt text, no unlabeled buttons, and no console errors. Evidence: `.factory/evidence/live-root/verify.json` and its desktop/mobile screenshots.
-- Playwright + Axe found zero violations and zero console errors at `/`, `/demo/`, `/privacy/`, `/terms/`, and `/404.html` at 390px. The unknown-route response is product-owned HTTP 404; browsers log that document status as a failed resource, while its rendered page has one H1/main and zero Axe violations.
-- Live root returns the restrictive CSP, `nosniff`, and referrer policy. Live `/demo/` contains the banner and `switchboard-demo-recording.svg`.
-- Visual evidence: `.factory/evidence/polish-2-home-mobile.png`, `.factory/evidence/polish-2-demo-mobile.png`, and `.factory/evidence/polish-2-demo-desktop.png`.
+- `.factory/evidence/polish-3-local/home-mobile.png`
+- `.factory/evidence/polish-3-local/demo-mobile.png`
+- `.factory/evidence/polish-3-local/privacy-desktop.png`
+- `.factory/evidence/polish-3-local/terms-desktop.png`
+
+## Deployment and cold live verification
+
+Deployed `dist/site` through `/opt/fleet/lib/deploy-static.sh data-engine-switchboard dist/site`. Azure Static Web Apps deployment `ad45b9b7-3294-42a3-a701-c1be14085d2d` succeeded, and the custom domain returned HTTPS 200.
+
+`/opt/fleet/lib/verify-url.sh` passed on the cold live root in 807 ms with no console errors, `lang=en`, one H1, one main, complete image alternatives, and named buttons. Evidence: `.factory/evidence/polish-3-live-root/verify.json` plus its desktop/mobile screenshots.
+
+`npm run test:live` then checked 10 route/viewport combinations and passed:
+
+- Exact route titles, descriptions, canonicals, OG/Twitter metadata, one H1/main, focus, Back, and no horizontal overflow.
+- Zero Axe violations on all five named routes at desktop and 390 px.
+- First-screen action visible at 390×844; all four mobile navigation targets complete and at least 44 px high.
+- One-click and direct-query demo entry, persistent banner, Reset demo, Start for real, real-data sentinel preservation, demo namespace deletion, and same-origin requests only.
+- Correct Terms and Privacy boundary sentences live; the former false sentences are absent.
+- `/missing-polish-3-route` returns the designed product-owned HTTP 404.
+- All internal links and both visibly marked GitHub links return 2xx.
+- CSP, HSTS, `nosniff`, referrer policy, and permissions policy are live.
+
+Live evidence is under `.factory/evidence/polish-3-live/`, including `live-check.json` and full-page mobile screenshots. The deployed HTML is byte-identical to the local build:
+
+| Artifact | SHA-256 |
+| --- | --- |
+| `index.html` | `e173747e537251a4046f3d843420bf6ff53fc370ed7166988361a008626de806` |
+| `privacy/index.html` | `ab6012806ff0d36bdd7f3f40fe05c6f11be9ddb8627e92e19dee2f0e939cb807` |
+| `terms/index.html` | `cfbed50d41f031ff8b2f015cbd3b1bfe2bee15f8471f4b6c18b38474ee216318` |
+| `assets/main-Bhvqflit.js` | `1c738bdfbac497525b1a6d71d25b8e6e9477dc1153e77af5ac5de8cfd153661f` |
+| `assets/main-Cx3MQGlM.css` | `748a499c19f28af4542395522acce8f3f0ba1dab631ac01631a07dba895d8268` |
 
 ## How to run
 
 ```sh
+npm ci
+npm test
+npm run build
 python3 -m pip install -r examples/seeded/requirements.txt
 cargo run --manifest-path crates/switchboard/Cargo.toml -- demo
 ```
 
-For the web sandbox, open `/demo/` or `/?demo=1`.
+Open `/demo/` or `/?demo=1` for the isolated web sample. Run `LIVE_BASE_URL=https://data-engine-switchboard.sociobot.in/ npm run test:live` for the post-deploy suite.
 
-## Known gaps at polish 2 (historical)
+## Known gaps
 
-None. The paid feature remains intentionally absent because no production checkout is registered.
+None. All findings in reviews 1–3 are resolved, tested, deployed, and cold-checked.

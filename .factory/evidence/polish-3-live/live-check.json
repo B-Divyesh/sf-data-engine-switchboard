@@ -1,0 +1,124 @@
+{
+  "base": "https://data-engine-switchboard.sociobot.in/",
+  "routes": [
+    {
+      "viewport": "desktop",
+      "path": "/",
+      "title": "Data Engine Switchboard — check Pandas migrations",
+      "requests": 4,
+      "axeViolations": 0
+    },
+    {
+      "viewport": "desktop",
+      "path": "/demo/",
+      "title": "Demo — Data Engine Switchboard",
+      "requests": 4,
+      "axeViolations": 0
+    },
+    {
+      "viewport": "desktop",
+      "path": "/privacy/",
+      "title": "Privacy — Data Engine Switchboard",
+      "requests": 3,
+      "axeViolations": 0
+    },
+    {
+      "viewport": "desktop",
+      "path": "/terms/",
+      "title": "Terms — Data Engine Switchboard",
+      "requests": 3,
+      "axeViolations": 0
+    },
+    {
+      "viewport": "desktop",
+      "path": "/404.html",
+      "title": "Page not found — Data Engine Switchboard",
+      "requests": 3,
+      "axeViolations": 0
+    },
+    {
+      "viewport": "mobile",
+      "path": "/",
+      "title": "Data Engine Switchboard — check Pandas migrations",
+      "requests": 4,
+      "axeViolations": 0
+    },
+    {
+      "viewport": "mobile",
+      "path": "/demo/",
+      "title": "Demo — Data Engine Switchboard",
+      "requests": 4,
+      "axeViolations": 0
+    },
+    {
+      "viewport": "mobile",
+      "path": "/privacy/",
+      "title": "Privacy — Data Engine Switchboard",
+      "requests": 3,
+      "axeViolations": 0
+    },
+    {
+      "viewport": "mobile",
+      "path": "/terms/",
+      "title": "Terms — Data Engine Switchboard",
+      "requests": 3,
+      "axeViolations": 0
+    },
+    {
+      "viewport": "mobile",
+      "path": "/404.html",
+      "title": "Page not found — Data Engine Switchboard",
+      "requests": 3,
+      "axeViolations": 0
+    }
+  ],
+  "requests": [
+    "https://data-engine-switchboard.sociobot.in/",
+    "https://data-engine-switchboard.sociobot.in/assets/main-Bhvqflit.js",
+    "https://data-engine-switchboard.sociobot.in/assets/main-Cx3MQGlM.css",
+    "https://data-engine-switchboard.sociobot.in/switchboard-hero-640.webp",
+    "https://data-engine-switchboard.sociobot.in/?demo=1",
+    "https://data-engine-switchboard.sociobot.in/assets/main-Bhvqflit.js",
+    "https://data-engine-switchboard.sociobot.in/assets/main-Cx3MQGlM.css",
+    "https://data-engine-switchboard.sociobot.in/switchboard-hero-640.webp",
+    "https://data-engine-switchboard.sociobot.in/demo/",
+    "https://data-engine-switchboard.sociobot.in/assets/main-Bhvqflit.js",
+    "https://data-engine-switchboard.sociobot.in/assets/main-Cx3MQGlM.css",
+    "https://data-engine-switchboard.sociobot.in/switchboard-demo-recording.svg",
+    "https://data-engine-switchboard.sociobot.in/?start=real",
+    "https://data-engine-switchboard.sociobot.in/assets/main-Bhvqflit.js",
+    "https://data-engine-switchboard.sociobot.in/assets/main-Cx3MQGlM.css",
+    "https://data-engine-switchboard.sociobot.in/switchboard-hero-640.webp"
+  ],
+  "externalLinks": [
+    {
+      "url": "https://data-engine-switchboard.sociobot.in/",
+      "status": 200
+    },
+    {
+      "url": "https://data-engine-switchboard.sociobot.in/demo/",
+      "status": 200
+    },
+    {
+      "url": "https://data-engine-switchboard.sociobot.in/privacy/",
+      "status": 200
+    },
+    {
+      "url": "https://data-engine-switchboard.sociobot.in/terms/",
+      "status": 200
+    },
+    {
+      "url": "https://github.com/B-Divyesh/sf-data-engine-switchboard",
+      "status": 200
+    },
+    {
+      "url": "https://github.com/B-Divyesh/sf-data-engine-switchboard/issues",
+      "status": 200
+    }
+  ],
+  "headers": {
+    "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "x-content-type-options": "nosniff",
+    "referrer-policy": "strict-origin-when-cross-origin"
+  }
+}

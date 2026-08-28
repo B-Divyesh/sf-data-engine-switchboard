@@ -1,0 +1,14 @@
+{
+  "url": "https://data-engine-switchboard.sociobot.in/",
+  "loadMs": 807,
+  "errors": [],
+  "a11y": {
+    "title": "Data Engine Switchboard — check Pandas migrations",
+    "lang": "en",
+    "h1": 1,
+    "main": true,
+    "imgsMissingAlt": 0,
+    "buttonsUnlabeled": 0,
+    "textLength": 1982
+  }
+}
