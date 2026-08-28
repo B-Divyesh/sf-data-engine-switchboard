@@ -1,0 +1,27 @@
+{
+  "name": "data-engine-switchboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run dev:site",
+    "dev:site": "vite --config site/vite.config.ts",
+    "test": "npm run test:cli && npm run test:site && npm run test:e2e",
+    "test:cli": "cargo fmt --all -- --check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace",
+    "test:site": "vitest run --config site/vitest.config.ts",
+    "test:e2e": "playwright test",
+    "build": "npm run build:cli && npm run build:site",
+    "build:cli": "cargo build --release --locked && mkdir -p dist/bin && cp target/release/switchboard dist/bin/switchboard",
+    "build:site": "vite build --config site/vite.config.ts"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "@playwright/test": "1.58.2",
+    "typescript": "5.9.2",
+    "vite": "7.3.6",
+    "vitest": "3.2.7"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

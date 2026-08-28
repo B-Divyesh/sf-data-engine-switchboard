@@ -11,14 +11,12 @@ def value_polars(frame):
 
 
 def schema_pandas(frame):
-    result = frame[["order_id", "region"]].copy()
-    result["order_id"] = result["order_id"].astype(str)
-    return result
+    return frame[["order_id", "region"]]
 
 
 def schema_polars(frame):
-    # Intentional incompatibility: identifier remains numeric.
-    return frame.select("order_id", "region")
+    # Intentional incompatibility: identifier changes signedness, not values.
+    return frame.select(pl.col("order_id").cast(pl.UInt64), "region")
 
 
 def order_pandas(frame):
@@ -28,4 +26,3 @@ def order_pandas(frame):
 def order_polars(frame):
     # Intentional incompatibility: direction is reversed.
     return frame.select("order_id", "gross").sort("gross", descending=True)
-

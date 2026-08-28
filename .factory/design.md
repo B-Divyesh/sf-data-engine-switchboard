@@ -46,11 +46,11 @@ Motion only explains routing. On first view, the hero signal line draws once ove
 
 ## Original asset plan and provenance
 
-One raster hero, `site/public/switchboard-hero.webp`, will depict a top-down brutalist concrete switching plate with three moss-green conduits diverging toward PASS, REVIEW, and STOP-like physical zones. It carries no words, logos, people, UI screenshots, or gradients; HTML supplies all meaningful labels and alternative text. It clarifies the product metaphor while leaving the actual CLI evidence to live markup.
+One raster hero, `site/public/switchboard-hero.webp`, depicts a top-down brutalist concrete switching plate with three routes terminating in moss, broken aggregate, and dark coal. It carries no words, logos, people, UI screenshots, or gradients; HTML supplies all meaningful labels and alternative text. It clarifies the product metaphor while leaving the actual CLI evidence to live markup.
 
-- Generator: factory `gen-image.sh` deployment (`factory-image`), requested by the work order.
-- Planned prompt: “Top-down editorial still life of a brutalist concrete industrial switchboard plate, three inset data conduits branching with distinct physical outcomes, restrained living moss tracing one route, oxidized steel fasteners, chalk and aggregate texture, severe daylight, flat near-orthographic composition, desaturated concrete and deep forest green with a small electric lichen accent, generous negative space, tactile photographic collage, no screens, no people, no text, no letters, no numbers, no logos, no watermark, no gradient.”
+- Generator: factory `/opt/fleet/lib/gen-image.sh`, `factory-image` deployment, high quality, 1536×1024 source; generated 28 August 2026.
+- Final prompt: “Top-down editorial still life of a brutalist concrete industrial switchboard plate, three inset data conduits branching with distinct physical outcomes, restrained living moss tracing one route, oxidized steel fasteners, chalk and aggregate texture, severe daylight, flat near-orthographic composition, desaturated concrete and deep forest green with a small electric lichen accent, generous negative space, tactile photographic collage, no screens, no people, no text, no letters, no numbers, no logos, no watermark, no gradient.”
 - License: project-original generated asset, released under the repository MIT license.
-- Post-processing: crop/resize and WebP conversion locally; final file must remain at or below 300 KB.
+- Post-processing: resized to 1200×800, metadata stripped, and converted locally to 72-quality WebP. Final size: 244,290 bytes (239 KB).
 
 All UI icons are hand-made CSS geometry or text glyphs; no third-party icon set or stock imagery is used.
