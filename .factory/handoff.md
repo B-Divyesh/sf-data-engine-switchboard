@@ -1,5 +1,22 @@
 # Data Engine Switchboard — build handoff
 
+## Independent verification 2 — PASS
+
+Candidate `fb308cc541b7c8153bb21f7d6cae69f101c4b528` was independently verified on 28 August
+2026 from a fresh clone and against <https://data-engine-switchboard.sociobot.in/>. **PASS:**
+`npm ci`, `npm test` (7 Rust, 2 Vitest, and 6 Playwright tests), `npm run build`, `cargo package`,
+and high-severity npm audit all passed. A packed crate installed into a clean consumer correctly
+returned seeded `NO-GO` exit 2 with all three expected value/schema/order findings; a fresh
+`init` suite returned `GO` exit 0; malformed bounds and oversized fixtures returned safe exit 3.
+
+The live HTML, JS, CSS, service worker, favicon, and both hero images match this candidate's
+production build byte-for-byte. Live desktop and 390px mobile checks found no console/page
+errors, no axe serious/critical findings, no horizontal overflow, visible keyboard focus,
+reduced-motion support, same-origin startup requests only, working offline reload after a warm
+load, and the expected cache/security headers. See `.factory/verification-2.md` for exact
+commands, hashes, browser evidence, and the one low-severity response-policy observation
+(missing CSP header).
+
 Work order: `data-engine-switchboard-build-1`
 
 Version: `0.1.0`
