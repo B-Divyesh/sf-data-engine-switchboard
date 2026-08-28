@@ -2,6 +2,7 @@ node_modules/
 dist/
 target/
 .venv/
+.test-venv/
 test-results/
 playwright-report/
 .env

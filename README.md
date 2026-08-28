@@ -1,113 +1,66 @@
 # Data Engine Switchboard
 
-Data Engine Switchboard is a local-first migration assessment CLI for Python data-product engineers. It runs declared Pandas and Polars transformations against the same redacted CSV or Parquet fixtures, then reports output parity, schema and row-order changes, sampled runtime and peak process memory, plus clearly labelled streaming-plan heuristics.
+Data Engine Switchboard checks a Pandas-to-Polars migration from the command line. It is for Python engineers who need evidence before changing a dataframe engine.
 
-It does not translate dataframe code, upload data, or pretend a small fixture proves production safety. It makes the evidence for a migration decision repeatable.
+It runs matching transforms against a local, redacted fixture. The report lists value, type, row-order, time, memory, and streaming warnings.
 
-## Install
+## Try the bundled sample
 
-Download a release binary for your platform, or build from source:
+Install Pandas and Polars, then run the one-command demo:
+
+```sh
+python3 -m pip install -r examples/seeded/requirements.txt
+cargo run --manifest-path crates/switchboard/Cargo.toml -- demo
+```
+
+The command creates a new temporary directory and prints its report path. The bundled fixture deliberately reports one value difference, one type difference, and one row-order difference. Its exit code is `2` because that sample is a no-go.
+
+## Install and use
+
+Build the CLI from source:
 
 ```sh
 cargo install --path crates/switchboard
 switchboard --help
 ```
 
-The CLI is versioned from `0.1.0` and requires Python 3.10+ with the libraries used by your transformation module. For the included example:
-
-```sh
-python3 -m pip install -r examples/seeded/requirements.txt
-```
-
-## Usage
-
-Create a starter assessment in the current directory:
+Create a starter assessment:
 
 ```sh
 switchboard init
 ```
 
-Edit `switchboard.toml` to point at a Python module and one or more bounded, redacted fixtures. Each function receives the dataframe loaded for its engine and returns a dataframe or, for Polars, a `LazyFrame`.
-
-```toml
-version = 1
-python = "python3"
-module = "transform.py"
-samples = 3
-max_fixture_mb = 25
-
-[comparison]
-schema = "compatible"
-order = "strict"
-nulls = "nan_equal"
-timezone = "utc"
-float_abs = 1e-9
-float_rel = 1e-7
-
-[[case]]
-name = "clean orders"
-fixture = "fixtures/orders.csv"
-pandas = "clean_pandas"
-polars = "clean_polars"
-streaming = true
-```
-
-Run the decision report:
-
-```sh
-switchboard assess switchboard.toml
-```
-
-Write a durable JSON report for CI or further analysis:
+Edit `switchboard.toml` to name your module and redacted fixtures. Each Pandas function returns a Pandas dataframe. Each Polars function returns a Polars dataframe or LazyFrame.
 
 ```sh
 switchboard assess switchboard.toml --json --output switchboard-report.json
 ```
 
-`--json` writes only JSON to stdout. `--output` writes the same report to a file while preserving terminal output unless `--json` is set. `--ci` disables decoration and makes execution errors terse; the CLI never prompts.
+`--json` writes the report to standard output. `--output` writes the same JSON to a file. The CLI never prompts.
 
-Exit codes are part of the public interface:
+Exit codes:
 
 | Code | Meaning |
 | ---: | --- |
-| `0` | GO: every case passed the configured parity checks |
-| `2` | NO-GO: at least one measured parity check failed |
-| `3` | Assessment could not run (invalid config, oversized fixture, Python/import/transform error) |
+| `0` | Every configured comparison passed. |
+| `2` | One or more measured comparisons failed. |
+| `3` | The assessment could not run. |
 
-Paths are resolved relative to the config file. Every fixture must be a regular `.csv` or `.parquet` file and no larger than `max_fixture_mb`; the setting is required to be in `1..=512`. Input remains on the machine running the command. There is no telemetry.
+Fixtures must be regular `.csv` or `.parquet` files. Set `max_fixture_mb` from 1 to 512. Paths are resolved from the config file.
 
-### Python transformation contract
+## What the report checks
 
-```python
-def clean_pandas(frame):
-    return frame.assign(net=frame["gross"] - frame["fee"])
+It rejects an oversized fixture before importing the transformation module.
 
-def clean_polars(frame):
-    import polars as pl
-    return frame.with_columns((pl.col("gross") - pl.col("fee")).alias("net"))
-```
+Choose strict, compatible, or ignored type checks. Choose strict or ignored row order. Set null, timezone, and float comparison rules in the TOML file.
 
-The embedded runner imports this module separately for each engine/sample. CSVs use `pandas.read_csv` and `polars.scan_csv`; Parquet uses `pandas.read_parquet` and `polars.scan_parquet`. A returned Polars `LazyFrame` is collected with the requested streaming engine when supported. Peak memory is the Python process maximum resident set size, not a per-operation allocation count.
+Measured output differences decide the result. A streaming warning comes from the Polars execution plan. It asks for review and cannot turn a measured failure into a pass.
 
-### Comparison semantics
+## Privacy
 
-- `schema`: `strict` compares reported dtype names; `compatible` groups numeric, temporal, string, boolean and null families; `ignore` checks column names only.
-- `order`: `strict` compares rows in emitted order; `ignore` performs a deterministic multiset comparison.
-- `nulls`: `strict` distinguishes null from IEEE NaN; `nan_equal` treats either as missing.
-- `timezone`: `strict` compares offsets as emitted; `utc` compares instants after UTC normalization; `ignore` removes timezone offsets while retaining local wall time.
-- `float_abs` and `float_rel` use `abs(a-b) <= abs_tol + rel_tol * max(abs(a), abs(b))`.
+Dataframe execution and report generation run locally. The CLI has no telemetry and does not upload fixtures, reports, or transformation code.
 
-The report’s **measured** section contains values observed from the runs. Its **heuristics** section is derived from Polars explain-plan text and always includes the matching rule and caveat; a heuristic can request review but cannot turn measured parity into a pass.
-
-## Seeded proof
-
-The checked-in suite intentionally introduces one value mismatch, one schema mismatch, and one order mismatch:
-
-```sh
-switchboard assess examples/seeded/switchboard.toml --json
-```
-
-It should return exit code `2` and report all three cases. This example is covered by comparator tests and is the recorded scenario on the product site.
+The documentation site has no analytics or payment flow. Its one-click demo uses only a `demo:` browser-storage key and never reads a real-user storage key. See the site’s `/privacy/` and `/terms/` pages.
 
 ## Development
 
@@ -117,23 +70,7 @@ npm test
 npm run build
 ```
 
-`npm test` runs Rust formatting/lints/tests and the site checks. `npm run build` creates the release binary under `dist/bin/` and the deployable landing/docs site under `dist/site/` (with `index.html` at that root). To work on one part:
-
-```sh
-cargo test --workspace
-npm run dev:site
-npm run build:site
-```
-
-Create a registry-ready Rust package without publishing:
-
-```sh
-cargo package --manifest-path crates/switchboard/Cargo.toml
-```
-
-## Privacy and limits
-
-All dataframe execution and report generation is local. Only the optional website license verifier contacts Sociobot after a user supplies or receives a purchase token. Read the site’s `/privacy/` and `/terms/` pages for that flow. Always use representative, redacted fixtures and validate a migration again under production-like load.
+Run `cargo package --manifest-path crates/switchboard/Cargo.toml --locked` to check the publishable crate without publishing it.
 
 ## License
 

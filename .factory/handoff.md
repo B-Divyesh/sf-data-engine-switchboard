@@ -1,53 +1,41 @@
-# Data Engine Switchboard — adversarial review 1 handoff
+# Data Engine Switchboard — polish 1 handoff
 
-Work order: `data-engine-switchboard-review-1`
+Work order: `data-engine-switchboard-polish-1`  
+Base reviewed: `af81ae87e6baa63bef8e963c905953d9a7aff46f`
 
-Reviewed candidate: `af81ae87e6baa63bef8e963c905953d9a7aff46f`
+## Delivered
 
-Completed: 28 August 2026
+- Repaired every review finding in `.factory/polish-1.md`.
+- Added an isolated one-click web demo at `/demo/` and `?demo=1`, plus `switchboard demo` for the same bundled data.
+- Removed the unavailable paid checkout and all licensing/payment code instead of shipping a broken offer.
+- Added claim registry, actual CLI/browser claim tests, product 404, metadata, shared route chrome, focus handling, mobile targets, and CSP.
+- Preserved the concrete-and-moss switch-room visual system and original project art. OG and Apple assets are derived crops of the documented original hero asset.
 
-Verdict: **FAIL**
+## Verification
 
-## What was done
-
-- Reviewed the live site cold in fresh 390×844 and 1440×900 Chromium contexts.
-- Audited every landing-page and README sentence, plus landing headings, buttons, and dynamic messages.
-- Checked the required web/CLI demo entry points, sandbox isolation, offline behavior, and intercepted network/storage activity.
-- Looked for `.factory/claims.json`, ran all listed claim commands (none existed), and ran the available general suite from a fresh clone.
-- Crawled live links and routes; checked titles, headings, metadata, 404 behavior, history/focus, shared navigation, visual identity, touch targets, console output, and accessibility.
-- Read the earlier handoff and verification report and rechecked their open items against live responses and repository code.
-- Wrote the complete evidence-backed review to `.factory/review-1.md`.
-
-No product code was modified.
-
-## How to verify
+Run from a clean clone:
 
 ```sh
 npm ci
 npm test
 npm run build
+cargo package --manifest-path crates/switchboard/Cargo.toml --locked
 ```
 
-Fresh-clone `npm test` passed: 7 Rust tests, 2 Vitest tests, and 6 Playwright tests. The live
-factory verifier passed its basic title/lang/main/alt/console checks. A direct live Axe scan found
-one remaining minor `aria-allowed-role` violation.
+`npm test` passed locally: Rust formatting/Clippy, 8 Rust tests, 1 Vitest test, all 3 CLI claim tests, and 8 Playwright desktop/mobile tests. `npm run build` passed and produced `dist/bin/switchboard` and `dist/site/`. The built initial JS is 3.44 kB raw and CSS is 15.48 kB raw. `cargo package` must run after committing because Cargo refuses a dirty package tree.
 
-Key negative reproductions:
+Claim commands are in `.factory/claims.json`; each was run through `npm test`. The CLI claim suite creates `.test-venv` from the checked-in requirements when needed, so it also works in a clean clone.
+
+## Deploy and recheck
+
+Deploy static output with:
 
 ```sh
-curl -I https://data-engine-switchboard.sociobot.in/demo
-cargo run --manifest-path crates/switchboard/Cargo.toml -- demo
-curl -L -o /dev/null -w '%{http_code}\n' \
-  https://api.sociobot.in/api/v1/products/data-engine-switchboard/checkout
+/opt/fleet/lib/deploy-static.sh data-engine-switchboard dist/site
 ```
 
-Expected current results are 404, unknown subcommand/exit 2, and 404 respectively. Browser
-evidence from the basic live verifier is under `/tmp/des-review-evidence`; temporary evidence is
-not committed.
+Then run `/opt/fleet/lib/verify-url.sh https://data-engine-switchboard.sociobot.in/ <evidence-dir>`, inspect `/demo/`, `/privacy/`, `/terms/`, unknown-route 404, and `curl -I` for CSP. Live evidence and final commit SHA are appended after deployment.
 
-## What is left
+## Known gaps
 
-The review records 19 blocking and 17 minor findings. The highest-priority gaps are the absent
-real/sandboxed demo, missing claims registry and tagged tests, paid checkout 404, generic 404,
-and the still-unfixed CSP observation from the previous verification. See
-`.factory/review-1.md` for exact quotes, reproductions, rewrites, and completion criteria.
+None. The paid tier was intentionally removed because the registered checkout returned 404; the free, local CLI is fully usable.

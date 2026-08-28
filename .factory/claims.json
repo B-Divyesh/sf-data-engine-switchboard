@@ -1,0 +1,8 @@
+[
+  {"id":"demo-sandbox","claim":"The one-click web demo uses its own storage and never saves sample actions to real data.","where":"landing action, /demo, README","test":"npx playwright test --grep @claim:demo-sandbox","sandbox":"fresh browser context with a real-storage sentinel"},
+  {"id":"sample-report","claim":"The bundled sample reports intentional value, type, and row-order differences.","where":"landing sample section, /demo, README","test":"npx playwright test --grep @claim:sample-report","sandbox":"fresh browser context at /demo"},
+  {"id":"site-no-analytics","claim":"The documentation site has no analytics or third-party requests.","where":"landing privacy section, privacy policy, README","test":"npx playwright test --grep @claim:site-no-analytics","sandbox":"fresh browser context with whole-page request capture"},
+  {"id":"cli-demo-report","claim":"switchboard demo creates a local report with the three bundled migration differences.","where":"README demo section, CLI help","test":"npm run test:claim -- cli-demo-report","sandbox":"bundled sample with pandas and polars in a fresh temporary directory"},
+  {"id":"fixture-bound-before-import","claim":"The CLI rejects an oversized fixture before importing transformation code.","where":"landing workflow, README","test":"npm run test:claim -- fixture-bound-before-import","sandbox":"oversized temporary CSV and import-side-effect fixture"},
+  {"id":"cli-local-no-telemetry","claim":"The CLI has no telemetry and its embedded bridge performs no network I/O.","where":"landing and README privacy statements","test":"npm run test:claim -- cli-local-no-telemetry","sandbox":"source and bridge audit in a clean clone"}
+]

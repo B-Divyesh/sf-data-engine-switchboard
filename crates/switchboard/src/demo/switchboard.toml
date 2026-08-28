@@ -1,0 +1,34 @@
+version = 1
+python = "python3"
+module = "transform.py"
+samples = 2
+max_fixture_mb = 5
+
+[comparison]
+schema = "strict"
+order = "strict"
+nulls = "nan_equal"
+timezone = "utc"
+float_abs = 1e-9
+float_rel = 1e-7
+
+[[case]]
+name = "tax rounding changes a value"
+fixture = "fixtures/orders.csv"
+pandas = "value_pandas"
+polars = "value_polars"
+streaming = true
+
+[[case]]
+name = "identifier changes schema"
+fixture = "fixtures/orders.csv"
+pandas = "schema_pandas"
+polars = "schema_polars"
+streaming = true
+
+[[case]]
+name = "sort direction changes order"
+fixture = "fixtures/orders.csv"
+pandas = "order_pandas"
+polars = "order_polars"
+streaming = true

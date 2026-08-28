@@ -4,136 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f2efe5" />
-    <meta name="description" content="Compare Pandas and Polars output parity, runtime, memory, and streaming evidence locally." />
-    <meta name="color-scheme" content="light" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <title>Data Engine Switchboard — verify Pandas to Polars migrations</title>
+    <meta name="description" content="Check a Pandas-to-Polars migration on local, bounded sample fixtures." />
+    <link rel="canonical" href="https://data-engine-switchboard.sociobot.in/" />
+    <meta property="og:type" content="website" /><meta property="og:title" content="Data Engine Switchboard — check a Pandas-to-Polars migration" /><meta property="og:description" content="Compare local sample outputs before you migrate." /><meta property="og:image" content="https://data-engine-switchboard.sociobot.in/og-switchboard.webp" />
+    <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="Data Engine Switchboard — check a Pandas-to-Polars migration" /><meta name="twitter:description" content="Compare local sample outputs before you migrate." /><meta name="twitter:image" content="https://data-engine-switchboard.sociobot.in/og-switchboard.webp" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" /><link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>Data Engine Switchboard — check Pandas migrations</title>
     <script type="module" src="/src/main.ts"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-header">
-      <a class="wordmark" href="/" aria-label="DES / 01 — Data Engine Switchboard home">
-        <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span>DES / 01</span>
-      </a>
-      <nav aria-label="Primary navigation">
-        <a href="#proof">Proof</a>
-        <a href="#install">Install</a>
-        <a href="#license">License</a>
-        <a href="https://github.com/B-Divyesh/sf-data-engine-switchboard">Source</a>
-      </nav>
+      <a class="wordmark" href="/" aria-label="DES / 01 — Data Engine Switchboard home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span><span>DES / 01</span></a>
+      <nav aria-label="Primary navigation"><a href="/demo/">Demo</a><a href="#how-it-works">How it works</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
     </header>
-
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow"><span>Local migration rig</span> Pandas → Polars</p>
-          <h1 id="hero-title">Switch engines.<br /><em>Keep the truth.</em></h1>
-          <p class="lede">Run both transformations on the same redacted fixture. Get one go/no-go report for values, schema, row order, time, memory, and streaming-plan risk.</p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#install">Install the CLI</a>
-            <a class="button button-secondary" href="#proof">Inspect the seeded proof</a>
-          </div>
-          <ul class="trust-line" aria-label="Product principles">
-            <li>Local only</li><li>Bounded fixtures</li><li>No telemetry</li>
-          </ul>
+          <p class="eyebrow"><span>Local CLI</span> Pandas → Polars</p>
+          <h1 id="hero-title" tabindex="-1">Check a Pandas-to-Polars migration</h1>
+          <p class="lede">For Python data engineers: compare both transforms on one redacted fixture and get a go/no-go report.</p>
+          <div class="hero-actions"><a class="button button-primary" href="/demo/">Try it with sample data</a><span class="action-note">A ready sample report opens.</span></div>
+          <ul class="trust-line" aria-label="Product facts"><li>Runs on your machine</li><li>Fixture limit required</li><li>No telemetry</li></ul>
         </div>
-        <figure class="hero-plate">
-          <img src="/switchboard-hero.webp" srcset="/switchboard-hero-640.webp 640w, /switchboard-hero.webp 1200w" sizes="(max-width: 900px) 100vw, 55vw" width="1200" height="800" alt="A concrete switching plate splits one data route into moss, rubble, and dark aggregate paths." fetchpriority="high" />
-          <figcaption>
-            <span>input.fixture</span>
-            <span>3 routes / 1 decision</span>
-          </figcaption>
-        </figure>
+        <figure class="hero-plate"><img src="/switchboard-hero.webp" srcset="/switchboard-hero-640.webp 640w, /switchboard-hero.webp 1200w" sizes="(max-width: 900px) 100vw, 55vw" width="1200" height="800" alt="A concrete switching plate splits one data route into moss, rubble, and dark aggregate paths." fetchpriority="high" /><figcaption><span>input.fixture</span><span>3 checks / 1 decision</span></figcaption></figure>
       </section>
-
-      <section class="proof-section" id="proof" aria-labelledby="proof-title">
-        <div class="section-intro">
-          <p class="eyebrow">Seeded run / 003 faults</p>
-          <h2 id="proof-title">See what “almost identical” hides.</h2>
-          <p>Choose a circuit. The live, keyboard-operable report shows the evidence the CLI returns. Measured failures and plan heuristics never share a label.</p>
-        </div>
-        <div class="report-rig">
-          <div class="case-selector" role="tablist" aria-label="Intentional incompatibility cases">
-            <button type="button" role="tab" aria-selected="true" aria-controls="case-panel" id="case-value" data-case="value"><span>01</span> Value drift</button>
-            <button type="button" role="tab" aria-selected="false" aria-controls="case-panel" id="case-schema" data-case="schema" tabindex="-1"><span>02</span> Schema drift</button>
-            <button type="button" role="tab" aria-selected="false" aria-controls="case-panel" id="case-order" data-case="order" tabindex="-1"><span>03</span> Order drift</button>
-          </div>
-          <div class="signal-line" aria-hidden="true"><i></i></div>
-          <article class="terminal" id="case-panel" role="tabpanel" aria-labelledby="case-value" tabindex="0">
-            <div class="terminal-bar"><span>MEASURED FACTS</span><span>switchboard-report.json</span></div>
-            <div class="decision"><strong>NO-GO</strong><span id="demo-case-name">tax rounding changes a value</span></div>
-            <dl class="measure-grid">
-              <div><dt>Rows</dt><dd id="demo-rows">3 / 3</dd></div>
-              <div><dt>Runtime</dt><dd id="demo-time">14.2 / 3.8 ms</dd></div>
-              <div><dt>Peak RSS</dt><dd id="demo-memory">84 / 42 MB</dd></div>
-              <div><dt>Streaming</dt><dd id="demo-stream">applied</dd></div>
-            </dl>
-            <div class="finding" aria-live="polite">
-              <span class="finding-code" id="demo-code">VALUE</span>
-              <p id="demo-finding">Values differ at row 1, column 2.</p>
-            </div>
-            <div class="heuristic"><span>HEURISTIC / REVIEW</span><p id="demo-heuristic">No plan markers detected. This does not prove every operator streamed.</p></div>
-          </article>
-        </div>
+      <section class="proof-section" id="sample" aria-labelledby="sample-title">
+        <div class="section-intro"><p class="eyebrow">Bundled sample</p><h2 id="sample-title">Find differences before you migrate</h2><p>The sample report shows a value, type, and row-order difference. It is a readable record of the bundled CLI demo.</p><a class="text-link large-link" href="/demo/">Open the sample report</a></div>
+        <div class="report-rig"><div class="case-selector" role="tablist" aria-label="Sample differences"><button type="button" role="tab" aria-selected="true" aria-controls="case-panel" id="case-value" data-case="value"><span>01</span> Value difference</button><button type="button" role="tab" aria-selected="false" aria-controls="case-panel" id="case-schema" data-case="schema" tabindex="-1"><span>02</span> Type difference</button><button type="button" role="tab" aria-selected="false" aria-controls="case-panel" id="case-order" data-case="order" tabindex="-1"><span>03</span> Row-order difference</button></div><div class="signal-line" aria-hidden="true"><i></i></div><div class="terminal" id="case-panel" role="tabpanel" aria-labelledby="case-value" tabindex="0"><div class="terminal-bar"><span>DEMO REPORT</span><span>switchboard-report.json</span></div><div class="decision"><strong>NO-GO</strong><span id="demo-case-name">tax rounding changes a value</span></div><div class="finding" aria-live="polite"><span class="finding-code" id="demo-code">VALUE</span><p id="demo-finding">A value differs in the bundled sample.</p></div><div class="heuristic"><span>STREAMING WARNING</span><p id="demo-heuristic">Plan warnings ask for review. They do not decide pass or fail.</p></div></div></div>
       </section>
-
-      <section class="workflow" aria-labelledby="workflow-title">
-        <div class="section-intro">
-          <p class="eyebrow">One command / evidence first</p>
-          <h2 id="workflow-title">A migration gate, not another notebook.</h2>
-        </div>
-        <ol class="route-list">
-          <li><span class="route-number">01</span><div><h3>Declare both paths</h3><p>Point a small TOML file at your Pandas and Polars functions plus representative CSV or Parquet fixtures.</p></div></li>
-          <li><span class="route-number">02</span><div><h3>Run locally</h3><p>Each engine gets an isolated Python process. Fixture size is enforced before either import or transformation runs.</p></div></li>
-          <li><span class="route-number">03</span><div><h3>Make the call</h3><p>Review measured parity and benchmark samples separately from version-sensitive explain-plan heuristics.</p></div></li>
-        </ol>
-      </section>
-
-      <section class="install" id="install" aria-labelledby="install-title">
-        <div class="section-intro inverse">
-          <p class="eyebrow">Rust binary / Python-aware</p>
-          <h2 id="install-title">Bolt it into your repo.</h2>
-          <p>The binary embeds its Python bridge. Your data and transformations stay where they are.</p>
-        </div>
-        <div class="command-stack">
-          <div class="command-row"><code tabindex="0">cargo install --git https://github.com/B-Divyesh/sf-data-engine-switchboard</code><button type="button" class="copy-button" data-copy="cargo install --git https://github.com/B-Divyesh/sf-data-engine-switchboard">Copy install</button></div>
-          <div class="command-row"><code tabindex="0">switchboard init &amp;&amp; switchboard assess</code><button type="button" class="copy-button" data-copy="switchboard init &amp;&amp; switchboard assess">Copy run</button></div>
-        </div>
-        <div class="semantics">
-          <h3>Dial the semantics that matter</h3>
-          <ul><li>Float absolute + relative tolerance</li><li>Strict or compatible schemas</li><li>Strict or ignored row order</li><li>Strict, UTC, or wall-time timezone comparison</li><li>Null versus NaN policy</li><li>1–10 benchmark samples</li></ul>
-          <a class="text-link" href="https://github.com/B-Divyesh/sf-data-engine-switchboard#usage">Read the full CLI contract <span aria-hidden="true">→</span></a>
-        </div>
-      </section>
-
-      <section class="license-section" id="license" aria-labelledby="license-title">
-        <div class="license-copy">
-          <p class="eyebrow">Field kit / one-time</p>
-          <h2 id="license-title">Keep the CLI free. Upgrade the playbook.</h2>
-          <p>The core assessor, JSON export, and every safety check are MIT-licensed. A <strong>$29 one-time</strong> Field Kit unlocks CI policy presets, a representative-fixture matrix, rollout checkpoints, and a printable migration review.</p>
-          <p class="fine-print">Sociobot/Dodo is the merchant of record. Refunds are handled there and revoke the license automatically.</p>
-        </div>
-        <div class="license-panel">
-          <a class="button button-primary buy-link" href="https://api.sociobot.in/api/v1/products/data-engine-switchboard/checkout">Buy the $29 Field Kit</a>
-          <form id="license-form" novalidate>
-            <label for="license-token">Have a license? Paste it</label>
-            <div class="license-input-row"><input id="license-token" name="license" type="text" autocomplete="off" spellcheck="false" aria-describedby="license-help license-status" /><button type="submit">Verify license</button></div>
-            <p id="license-help">Verification contacts only the Sociobot license endpoint.</p>
-          </form>
-          <p id="license-status" class="license-status" role="status" aria-live="polite">Free CLI active. No license stored.</p>
-          <button type="button" id="download-kit" class="kit-download" hidden>Download the Field Kit</button>
-          <p class="legal-links"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></p>
-        </div>
-      </section>
+      <section class="workflow" id="how-it-works" aria-labelledby="workflow-title"><div class="section-intro"><p class="eyebrow">Three steps</p><h2 id="workflow-title">Check a migration in three steps</h2></div><ol class="route-list"><li><span class="route-number">01</span><div><h3>Choose both transformation functions</h3><p>Point one TOML file at matching Pandas and Polars functions.</p></div></li><li><span class="route-number">02</span><div><h3>Run a bounded local fixture</h3><p>The command rejects a fixture over its declared limit before it imports your code.</p></div></li><li><span class="route-number">03</span><div><h3>Read the migration decision</h3><p>Measured output differences decide the result. Streaming warnings remain separate.</p></div></li></ol></section>
+      <section class="install" id="install" aria-labelledby="install-title"><div class="section-intro inverse"><p class="eyebrow">Rust CLI / Python-aware</p><h2 id="install-title">Run the local migration check</h2><p>Build it from source, then run the bundled demo in a new temporary directory.</p></div><div class="command-stack"><div class="command-row"><code tabindex="0">cargo install --path crates/switchboard</code><button type="button" class="copy-button" data-copy="cargo install --path crates/switchboard">Copy install</button></div><div class="command-row"><code tabindex="0">switchboard demo</code><button type="button" class="copy-button" data-copy="switchboard demo">Copy demo command</button></div></div><div class="semantics"><h3>Choose how outputs are compared</h3><ul><li>Float tolerances</li><li>Type matching</li><li>Row order</li><li>Timezone handling</li><li>Null handling</li><li>One to ten samples</li></ul><a class="text-link" href="https://github.com/B-Divyesh/sf-data-engine-switchboard#usage">Read the CLI guide (external)</a></div></section>
+      <section class="privacy-section" aria-labelledby="privacy-title"><div class="section-intro"><p class="eyebrow">Privacy</p><h2 id="privacy-title">Your files stay local</h2><p>The command does not upload fixtures, reports, or transformation code. The site has no analytics or payment flow.</p><p><a class="text-link large-link" href="/privacy/">Read the privacy policy</a> <a class="text-link large-link" href="/terms/">Read the terms</a></p></div></section>
     </main>
-
-    <footer>
-      <p>Data Engine Switchboard <span>v0.1.0</span></p>
-      <p>Measure first. Migrate second.</p>
-    </footer>
-    <div id="offline-notice" class="offline-notice" role="status" hidden>You’re offline. The cached docs and free demo still work.</div>
+    <footer><p>Data Engine Switchboard <span>v0.1.0 · build polish-1</span></p><p>Built by Param Factory · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p></footer>
     <div id="announcer" class="visually-hidden" aria-live="polite"></div>
   </body>
 </html>

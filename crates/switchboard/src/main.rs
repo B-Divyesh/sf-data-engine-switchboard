@@ -48,6 +48,12 @@ enum Command {
         #[arg(long)]
         force: bool,
     },
+    /// Run the bundled Pandas-to-Polars sample in a new temporary directory
+    Demo {
+        /// Python command with pandas and polars installed
+        #[arg(long, default_value = "python3")]
+        python: String,
+    },
 }
 
 fn main() -> ExitCode {
@@ -92,7 +98,48 @@ fn run() -> Result<u8> {
             println!("Next: edit transform.py, then run `switchboard assess`");
             Ok(0)
         }
+        Command::Demo { python } => run_demo(&python),
     }
+}
+
+fn run_demo(python: &str) -> Result<u8> {
+    let nonce = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)?
+        .as_nanos();
+    let root = std::env::temp_dir().join(format!(
+        "data-engine-switchboard-demo-{}-{nonce}",
+        std::process::id()
+    ));
+    std::fs::create_dir_all(root.join("fixtures"))?;
+    std::fs::write(
+        root.join("switchboard.toml"),
+        include_str!("demo/switchboard.toml"),
+    )?;
+    std::fs::write(root.join("transform.py"), include_str!("demo/transform.py"))?;
+    std::fs::write(
+        root.join("fixtures/orders.csv"),
+        include_str!("demo/orders.csv"),
+    )?;
+    let config_path = root.join("switchboard.toml");
+    let config = std::fs::read_to_string(&config_path)?;
+    std::fs::write(
+        &config_path,
+        config.replacen("python = \"python3\"", &format!("python = {python:?}"), 1),
+    )?;
+    let report = assess::assess(&config_path)?;
+    let report_path = root.join("switchboard-report.json");
+    std::fs::write(
+        &report_path,
+        format!("{}\n", serde_json::to_string_pretty(&report)?),
+    )?;
+    report::print_human(&report, false);
+    println!("DEMO      Sample files and report: {}", root.display());
+    println!("REPORT    {}", report_path.display());
+    Ok(if report.decision == report::Decision::Go {
+        0
+    } else {
+        2
+    })
 }
 
 fn init(root: &std::path::Path, force: bool) -> Result<()> {
@@ -130,5 +177,12 @@ mod tests {
         init(dir.path(), false).unwrap();
         let error = init(dir.path(), false).unwrap_err().to_string();
         assert!(error.contains("already exists"));
+    }
+
+    #[test]
+    fn demo_files_are_bundled_in_the_binary() {
+        assert!(include_str!("demo/switchboard.toml").contains("tax rounding"));
+        assert!(include_str!("demo/transform.py").contains("value_polars"));
+        assert!(include_str!("demo/orders.csv").contains("order_id"));
     }
 }

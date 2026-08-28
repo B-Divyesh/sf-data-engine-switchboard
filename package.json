@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "npm run dev:site",
     "dev:site": "vite --config site/vite.config.ts",
-    "test": "npm run test:cli && npm run test:site && npm run test:e2e",
+    "test": "npm run test:cli && npm run test:site && npm run test:claims && npm run test:e2e",
     "test:cli": "cargo fmt --all -- --check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace",
     "test:site": "vitest run --config site/vitest.config.ts",
     "test:e2e": "playwright test",
+    "test:claims": "test -x .test-venv/bin/python || (python3 -m venv .test-venv && .test-venv/bin/pip install -r examples/seeded/requirements.txt); node tests/cli-claims.mjs",
+    "test:claim": "test -x .test-venv/bin/python || (python3 -m venv .test-venv && .test-venv/bin/pip install -r examples/seeded/requirements.txt); node tests/cli-claims.mjs",
     "build": "npm run build:cli && npm run build:site",
     "build:cli": "cargo build --release --locked && mkdir -p dist/bin && cp target/release/switchboard dist/bin/switchboard",
     "build:site": "vite build --config site/vite.config.ts"

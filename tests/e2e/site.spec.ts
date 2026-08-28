@@ -1,47 +1,52 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-test('product page is operable, responsive, and has no serious accessibility issues', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+test('@claim:demo-sandbox opens directly, isolates storage, and resets', async ({ page }) => {
   await page.goto('/');
-  await expect(page).toHaveTitle(/Data Engine Switchboard/);
-  await expect(page.locator('main')).toHaveCount(1);
-  await expect(page.locator('h1')).toHaveCount(1);
-  await expect(page.locator('.hero-plate img')).toHaveJSProperty('complete', true);
-
-  const firstTab = page.getByRole('tab', { name: /Value drift/ });
-  await firstTab.focus();
-  await page.keyboard.press('ArrowRight');
-  await expect(page.getByRole('tab', { name: /Schema drift/ })).toHaveAttribute('aria-selected', 'true');
-  await expect(page.locator('#demo-code')).toHaveText('SCHEMA');
-
-  const viewportWidth = await page.evaluate(() => document.documentElement.clientWidth);
-  const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
-  expect(scrollWidth).toBeLessThanOrEqual(viewportWidth + 1);
-  expect(errors).toEqual([]);
-
-  const results = await new AxeBuilder({ page }).analyze();
-  expect(results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact || ''))).toEqual([]);
+  await page.evaluate(() => localStorage.setItem('sb_license:data-engine-switchboard', 'real-user-token'));
+  const requests: string[] = [];
+  page.on('request', (request) => requests.push(request.url()));
+  await page.goto('/?demo=1');
+  await expect(page).toHaveURL(/\/demo\/$/);
+  await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
+  await page.getByRole('button', { name: 'Reset demo' }).click();
+  expect(await page.evaluate(() => localStorage.getItem('sb_license:data-engine-switchboard'))).toBe('real-user-token');
+  expect(await page.evaluate(() => Object.keys(localStorage).filter((key) => key.startsWith('demo:')))).toEqual(['demo:data-engine-switchboard:opened']);
+  expect(requests.every((url) => url.startsWith('http://127.0.0.1:4173/'))).toBeTruthy();
 });
 
-test('returned licenses are stored, stripped from the URL, and unlock after verification', async ({ page }) => {
-  await page.route('https://api.sociobot.in/**', (route) => route.fulfill({
-    status: 200,
-    contentType: 'application/json',
-    body: JSON.stringify({ valid: true, reason: 'ok', expires_at: null })
-  }));
-  await page.goto('/?license=test-token#license');
-  await expect(page).toHaveURL(/\/#license$/);
-  await expect(page.locator('#download-kit')).toBeVisible();
-  await expect(page.locator('#license-status')).toContainText('verified');
-  expect(await page.evaluate(() => localStorage.getItem('sb_license:data-engine-switchboard'))).toBe('test-token');
+test('@claim:site-no-analytics uses only same-origin resources', async ({ page }) => {
+  const requests: string[] = [];
+  page.on('request', (request) => requests.push(request.url()));
+  await page.goto('/demo/');
+  expect(requests.length).toBeGreaterThan(0);
+  expect(requests.every((url) => url.startsWith('http://127.0.0.1:4173/'))).toBeTruthy();
 });
 
-test('legal pages expose one clear document heading', async ({ page }) => {
-  for (const path of ['/privacy/', '/terms/']) {
+test('@claim:sample-report shows three bundled differences', async ({ page }) => {
+  await page.goto('/demo/');
+  await expect(page.getByText('Three measured differences')).toBeVisible();
+  await expect(page.getByRole('listitem')).toHaveCount(3);
+  await expect(page.getByText('tax rounding changes a value')).toBeVisible();
+  await expect(page.getByText('identifier changes schema')).toBeVisible();
+  await expect(page.getByText('sort direction changes order')).toBeVisible();
+});
+
+test('product routes are focused, complete, responsive, and accessible', async ({ page }) => {
+  for (const path of ['/', '/demo/', '/privacy/', '/terms/', '/404.html']) {
     await page.goto(path);
     await expect(page.locator('main')).toHaveCount(1);
     await expect(page.locator('h1')).toHaveCount(1);
+    await expect(page.locator('h1')).toBeFocused();
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
+    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
   }
+  await page.goto('/');
+  const firstTab = page.getByRole('tab', { name: /Value difference/ });
+  await firstTab.focus(); await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('tab', { name: /Type difference/ })).toHaveAttribute('aria-selected', 'true');
+  const viewportWidth = await page.evaluate(() => document.documentElement.clientWidth);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewportWidth + 1);
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
 });
