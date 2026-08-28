@@ -1,0 +1,21 @@
+version = 1
+python = "python3"
+module = "transform.py"
+samples = 3
+max_fixture_mb = 25
+
+[comparison]
+schema = "compatible"
+order = "strict"
+nulls = "nan_equal"
+timezone = "utc"
+float_abs = 1e-9
+float_rel = 1e-7
+
+[[case]]
+name = "clean orders"
+fixture = "fixtures/orders.csv"
+pandas = "clean_pandas"
+polars = "clean_polars"
+streaming = true
+
