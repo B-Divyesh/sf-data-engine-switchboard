@@ -25,7 +25,7 @@ cargo package --manifest-path crates/switchboard/Cargo.toml --locked
 
 All passed. The release build produced `dist/bin/switchboard` and `dist/site/`. `cargo package` verified a 17.5 KiB compressed crate.
 
-Fresh clone evidence: `/tmp/data-engine-switchboard-polish2-clean` was cloned after the repair commits. `npm ci` passed, then `npm run test:claims` passed all six CLI claim IDs and `npx playwright test --grep @claim:` passed all browser claim checks at desktop and 390px.
+Fresh clone evidence: `/tmp/data-engine-switchboard-polish2-final-clean` was cloned from final pushed `main`. `npm ci` passed, then `npm run test:claims` passed all six CLI claim IDs and `npx playwright test --grep @claim:` passed all browser claim checks at desktop and 390px.
 
 Claim IDs: `demo-sandbox`, `recorded-cli-demo`, `report-evidence`, `cli-output-contract`, `comparison-policy`, `fixture-bound-before-import`, `cli-local-only`, `site-no-analytics`, and `route-metadata` all pass. See `.factory/claims.json` for their exact commands and sandbox definitions.
 
