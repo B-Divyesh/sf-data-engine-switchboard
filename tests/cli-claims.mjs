@@ -50,6 +50,22 @@ check('report-evidence', () => {
   assert.equal(report.cases[2].heuristics[0].caveat.includes('not a measured'), true);
 });
 
+check('report-scope', () => {
+  const { report } = reportFromDemo();
+  assert.deepEqual(report.cases.map((item) => item.fixture.path), ['fixtures/orders.csv', 'fixtures/orders.csv', 'fixtures/orders.csv']);
+  assert.equal(report.cases.every((item) => typeof item.passed === 'boolean' && item.measured && Array.isArray(item.findings)), true);
+  assert.deepEqual(Object.keys(report.tool).sort(), ['name', 'version']);
+  const reportKeys = new Set();
+  const collectKeys = (value) => {
+    if (!value || typeof value !== 'object') return;
+    for (const [key, child] of Object.entries(value)) { reportKeys.add(key); collectKeys(child); }
+  };
+  collectKeys(report);
+  for (const key of ['module', 'module_hash', 'python', 'python_version', 'pandas_version', 'polars_version', 'environment']) {
+    assert.equal(reportKeys.has(key), false, `${key} must not be presented as recorded provenance`);
+  }
+});
+
 check('cli-output-contract', () => {
   const dir = mkdtempSync(join(tmpdir(), 'switchboard-output-'));
   try {
@@ -109,13 +125,30 @@ check('cli-local-only', () => {
   try {
     const source = join(dir, 'deny-network.c');
     const library = join(dir, 'deny-network.so');
-    writeFileSync(source, `#define _GNU_SOURCE\n#include <sys/socket.h>\n#include <errno.h>\nint socket(int d,int t,int p){if(d==AF_INET||d==AF_INET6){errno=ENETDOWN;return -1;}return -1;}\nint connect(int f,const struct sockaddr*a,socklen_t l){errno=ENETDOWN;return -1;}\n`);
+    const marker = join(dir, 'network-attempted');
+    writeFileSync(source, `#define _GNU_SOURCE\n#include <sys/socket.h>\n#include <errno.h>\n#include <fcntl.h>\n#include <stdlib.h>\n#include <unistd.h>\nstatic void mark(void){const char*p=getenv("SWITCHBOARD_NETWORK_MARKER");if(p){int f=open(p,O_WRONLY|O_CREAT|O_APPEND,0600);if(f>=0){write(f,"attempted\\n",10);close(f);}}}\nint socket(int d,int t,int p){if(d==AF_INET||d==AF_INET6)mark();errno=ENETDOWN;return -1;}\nint connect(int f,const struct sockaddr*a,socklen_t l){mark();errno=ENETDOWN;return -1;}\n`);
     const compiler = spawnSync('cc', ['-shared', '-fPIC', source, '-o', library], { encoding: 'utf8' });
     assert.equal(compiler.status, 0, compiler.stderr);
-    const { result, path, report } = reportFromDemo({ env: { LD_PRELOAD: library } });
+    const { result, path, report } = reportFromDemo({ env: { LD_PRELOAD: library, SWITCHBOARD_NETWORK_MARKER: marker } });
     assert.match(result.stdout, /LOCAL\s+No fixture data was uploaded/);
     assert.equal(report.privacy, 'local_only_no_upload');
     assert.equal(basename(path), 'switchboard-report.json');
     assert.equal(path.includes(root), false);
+    assert.equal(existsSync(marker), false, 'the CLI process tree attempted a network connection');
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+check('transformation-file-access', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'switchboard-transform-access-'));
+  try {
+    const sentinel = join(dir, 'undeclared-sentinel.txt');
+    const marker = join(dir, 'transform-read.txt');
+    writeFileSync(sentinel, 'available-to-transform');
+    writeFileSync(join(dir, 'fixture.csv'), 'value\n1\n');
+    writeFileSync(join(dir, 'transform.py'), `from pathlib import Path\nsecret = Path(${JSON.stringify(sentinel)}).read_text()\nPath(${JSON.stringify(marker)}).write_text(secret)\ndef pandas_transform(frame):\n    return frame\ndef polars_transform(frame):\n    return frame\n`);
+    writeFileSync(join(dir, 'switchboard.toml'), `version = 1\npython = ${JSON.stringify(python)}\nmodule = "transform.py"\nsamples = 1\nmax_fixture_mb = 1\n[comparison]\nschema = "strict"\norder = "strict"\nnulls = "nan_equal"\ntimezone = "utc"\nfloat_abs = 1e-9\nfloat_rel = 1e-7\n[[case]]\nname = "file access disclosure"\nfixture = "fixture.csv"\npandas = "pandas_transform"\npolars = "polars_transform"\nstreaming = false\n`);
+    const result = run(['assess', join(dir, 'switchboard.toml'), '--json']);
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(readFileSync(marker, 'utf8'), 'available-to-transform');
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });

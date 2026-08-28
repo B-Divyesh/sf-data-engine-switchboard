@@ -41,10 +41,18 @@ function setupCopy(): void {
 }
 
 function setupDemoIsolation(): void {
-  if (new URLSearchParams(location.search).get('demo') === '1' && !document.documentElement.dataset.demo) { location.replace('/demo/'); return; }
+  const search = new URLSearchParams(location.search);
+  const clearDemoStorage = (): void => {
+    Object.keys(localStorage).filter((key) => key.startsWith('demo:')).forEach((key) => localStorage.removeItem(key));
+  };
+  if (search.get('demo') === '1' && !document.documentElement.dataset.demo) { location.replace('/demo/'); return; }
+  if (search.get('start') === 'real' && !document.documentElement.dataset.demo) {
+    clearDemoStorage();
+    history.replaceState(null, '', '/');
+  }
   if (!document.documentElement.dataset.demo) return;
   const resetDemo = (): void => {
-    Object.keys(localStorage).filter((key) => key.startsWith('demo:')).forEach((key) => localStorage.removeItem(key));
+    clearDemoStorage();
     localStorage.setItem('demo:data-engine-switchboard:opened', String(Date.now()));
     const announcer = byId('announcer'); if (announcer) announcer.textContent = 'Demo reset. The bundled sample is ready.';
   };

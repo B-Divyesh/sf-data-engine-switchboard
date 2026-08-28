@@ -1,1 +1,1 @@
-Check Pandas-to-Polars migrations with local, bounded fixture reports.
+Check Pandas-to-Polars migrations with bounded local fixtures and JSON go/no-go reports.

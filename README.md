@@ -62,6 +62,8 @@ Measured output differences decide the result. A streaming warning comes from th
 
 Dataframe execution and report generation run locally. The CLI has no telemetry and does not upload fixtures, reports, or transformation code.
 
+Your transformation code keeps the file access of its Python process.
+
 The documentation site has no analytics or third-party requests. Its one-click demo uses only a `demo:` browser-storage key and never reads a real-user storage key. See the site’s `/privacy/` and `/terms/` pages.
 
 ## Development
