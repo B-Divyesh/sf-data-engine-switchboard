@@ -18,3 +18,5 @@ Candidate repaired from `a49c54d1ed291b1e237e656d2e84ec9037c103cb`.
 | F-1-36, F-2-5 | Replaced the remaining visitor-facing “type” language with “schema” across landing, demo, README, tabs, and report labels. | `site/src/demo.test.ts`; `rg` audit; live `/demo/`. |
 
 No claim-like landing or README sentence is left outside the registry. The retained “recorded” statements are backed by the real bundled command test and its checked-in SVG artifact.
+
+Screenshot evidence for the UI findings is `.factory/evidence/polish-2-home-mobile.png`, `.factory/evidence/polish-2-demo-mobile.png`, and `.factory/evidence/polish-2-demo-desktop.png`. Live URLs checked after deployment were `/`, `/demo/`, `/privacy/`, `/terms/`, `/404.html`, and `/missing-review-route`; the CLI-only rows use their named clean-sandbox test rather than a browser screenshot.
