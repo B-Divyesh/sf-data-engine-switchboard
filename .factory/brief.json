@@ -1,0 +1,21 @@
+{
+  "slug": "data-engine-switchboard",
+  "title": "Data Engine Switchboard",
+  "territory": "devtools-data",
+  "user": "Python data-product engineers deciding whether a Pandas workload can move to Polars or a streaming engine without silently changing outputs.",
+  "smallest_useful_product": "A Python-aware CLI that runs declared Pandas and Polars transformations on local redacted CSV/Parquet fixtures, checks value/schema/order parity, samples time and peak memory, and flags known streaming fallbacks.",
+  "success_measure": "On a seeded suite with three intentional incompatibilities, the tool finds all three and produces a go/no-go report in one command.",
+  "artifact_class": "cli",
+  "monetization": "one-time",
+  "constraints": [
+    "Never upload datasets",
+    "Require bounded fixture sizes",
+    "Make float, timezone, null, schema and order semantics configurable",
+    "Clearly separate measured facts from heuristics"
+  ],
+  "non_goals": [
+    "Automatic code translation",
+    "Hosted execution",
+    "Replacing either dataframe library"
+  ]
+}
