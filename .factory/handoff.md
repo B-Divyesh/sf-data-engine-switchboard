@@ -73,3 +73,22 @@ Verdict: **PASS** — zero findings and zero untested public claims. The indepen
 - The clean build root matches the live root by SHA-256. Existing deployment evidence records mobile Lighthouse 99 performance and 100 accessibility.
 
 No product changes were made by this verification. Registry publication remains factory-owned.
+
+---
+
+## Strict review 6
+
+Work order: `data-engine-switchboard-review-6`
+
+Implementation reviewed: `0cbee8280a007d0c0080b17d014dc39e03280bec`
+
+Documentation/evidence base reviewed: `b4b96b74f3b226065cc6424aea7bc2d40e5799c4`
+
+Verdict: **PASS** — zero findings and zero untested public claims. The full report is `.factory/review-6.md`.
+
+- Fresh desktop and 390px phone sessions identified the migration-check job, Python-engineer audience, and sample action without scrolling. The live sample has the persistent demo label, realistic NO-GO output, reset, and isolated `demo:` storage.
+- From a clean checkout, all 12 declared claim commands passed, as did `npm test`, `npm run build`, `cargo package --manifest-path crates/switchboard/Cargo.toml --locked`, `npm audit --audit-level=high`, and `npm run test:live`.
+- The installed packaged CLI succeeded in a clean consumer directory. Its demo returned the expected exit 2 and three failures; starter creation succeeded; a repeated init safely returned exit 3.
+- Live desktop and mobile checks found zero Axe violations, no console errors or third-party requests, complete route metadata, valid links, and the expected designed HTTP 404. The live root hash equals the clean build hash.
+
+No product code was changed. Registry publication and deployment remain factory-owned.
