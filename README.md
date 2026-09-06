@@ -50,6 +50,8 @@ Exit codes:
 
 Fixtures must be regular `.csv` or `.parquet` files. Set `max_fixture_mb` from 1 to 512. Paths are resolved from the config file.
 
+Set `samples` from 1 to 10. Each engine runs that many times per fixture.
+
 ## What the report checks
 
 It rejects an oversized fixture before importing the transformation module.

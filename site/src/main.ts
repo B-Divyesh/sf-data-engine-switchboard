@@ -46,17 +46,14 @@ function setupDemoIsolation(): void {
     Object.keys(localStorage).filter((key) => key.startsWith('demo:')).forEach((key) => localStorage.removeItem(key));
   };
   if (search.get('demo') === '1' && !document.documentElement.dataset.demo) { location.replace('/demo/'); return; }
-  if (search.get('start') === 'real' && !document.documentElement.dataset.demo) {
-    clearDemoStorage();
-    history.replaceState(null, '', '/');
-  }
-  if (!document.documentElement.dataset.demo) return;
+  if (!document.documentElement.dataset.demo) { clearDemoStorage(); return; }
   const resetDemo = (): void => {
     clearDemoStorage();
     localStorage.setItem('demo:data-engine-switchboard:opened', String(Date.now()));
     const announcer = byId('announcer'); if (announcer) announcer.textContent = 'Demo reset. The bundled sample is ready.';
   };
   byId<HTMLButtonElement>('reset-demo')?.addEventListener('click', resetDemo);
+  byId<HTMLAnchorElement>('start-real')?.addEventListener('click', clearDemoStorage);
   if (!localStorage.getItem('demo:data-engine-switchboard:opened')) resetDemo();
 }
 

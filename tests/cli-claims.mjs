@@ -107,6 +107,36 @@ check('comparison-policy', () => {
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+check('sample-count-bounds', () => {
+  const rootDir = mkdtempSync(join(tmpdir(), 'switchboard-samples-'));
+  try {
+    for (const samples of [1, 10, 0, 11]) {
+      const assessment = join(rootDir, String(samples));
+      mkdirSync(assessment);
+      const importMarker = join(assessment, 'transform-imported');
+      writeFileSync(join(assessment, 'fixture.csv'), 'value\n1\n');
+      writeFileSync(join(assessment, 'transform.py'), `from pathlib import Path\nPath(${JSON.stringify(importMarker)}).write_text('imported')\ndef pandas_transform(frame):\n    return frame\ndef polars_transform(frame):\n    return frame.collect()\n`);
+      writeFileSync(join(assessment, 'switchboard.toml'), `version = 1\npython = ${JSON.stringify(python)}\nmodule = "transform.py"\nsamples = ${samples}\nmax_fixture_mb = 1\n[[case]]\nname = "sample count ${samples}"\nfixture = "fixture.csv"\npandas = "pandas_transform"\npolars = "polars_transform"\nstreaming = false\n`);
+      const result = run(['assess', join(assessment, 'switchboard.toml'), '--json']);
+      if (samples === 1 || samples === 10) {
+        assert.equal(result.status, 0, result.stderr);
+        const report = JSON.parse(result.stdout);
+        assert.equal(report.decision, 'go');
+        assert.equal(report.cases[0].measured.runtime_ms.pandas.samples, samples);
+        assert.equal(report.cases[0].measured.runtime_ms.polars.samples, samples);
+        assert.equal(report.cases[0].measured.peak_process_memory_bytes.pandas.samples, samples);
+        assert.equal(report.cases[0].measured.peak_process_memory_bytes.polars.samples, samples);
+        assert.equal(existsSync(importMarker), true);
+      } else {
+        assert.equal(result.status, 3, result.stderr);
+        assert.match(result.stderr, /samples must be between 1 and 10/);
+        assert.equal(result.stdout, '');
+        assert.equal(existsSync(importMarker), false, `samples=${samples} imported transformation code`);
+      }
+    }
+  } finally { rmSync(rootDir, { recursive: true, force: true }); }
+});
+
 check('fixture-bound-before-import', () => {
   const dir = mkdtempSync(join(tmpdir(), 'switchboard-bound-'));
   try {

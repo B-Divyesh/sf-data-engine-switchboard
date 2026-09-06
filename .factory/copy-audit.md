@@ -1,6 +1,6 @@
-# Copy audit — polish 3
+# Copy audit — repair 1
 
-Audited 28 August 2026. Hyphenated terms, command flags, and identifiers count as one word. No sentence exceeds 22 words. No banned marketing word appears.
+Audited 6 September 2026. Hyphenated terms, command flags, and identifiers count as one word. No sentence exceeds 22 words. No banned marketing word appears.
 
 The first screen says the job in five words, names Python data engineers in 16 words, and presents one primary action. The result note is five words. At 390×844, the action and all three facts remain inside the first viewport.
 
@@ -40,7 +40,7 @@ The remaining legal sentences range from five to 15 words. They state the MIT li
 
 ## README result
 
-All 37 README sentences are 22 words or fewer. The new disclosure, “Your transformation code keeps the file access of its Python process,” is 11 words and maps to `@claim:transformation-file-access`.
+All 39 README sentences are 22 words or fewer. “Set `samples` from 1 to 10.” has six words. “Each engine runs that many times per fixture.” has eight words. Both map to `@claim:sample-count-bounds`.
 
 ## Catalog description
 
