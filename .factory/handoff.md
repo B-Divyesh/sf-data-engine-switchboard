@@ -55,3 +55,21 @@ For the CLI sample, install `examples/seeded/requirements.txt`, then run `switch
 ## Remaining work
 
 No repair finding remains open. Registry publication is factory-owned and was not attempted.
+
+---
+
+## Independent verification 3
+
+Work order: `data-engine-switchboard-verify-3`
+Verified implementation: `0cbee8280a007d0c0080b17d014dc39e03280bec`
+Verified documentation: `f2447751b335eb49dc1d7a358fa07ef145b93624`
+
+Verdict: **PASS** — zero findings and zero untested public claims. The independent report is `.factory/verification-3.md`.
+
+- Fresh desktop and phone contexts confirmed the job, audience, and sample first action without scrolling; Axe found zero violations.
+- The live sample preserves real storage, resets only `demo:`, and Start for real returns to `/`.
+- All 12 declared claim commands, `npm test`, `npm run build`, `cargo package`, `npm audit`, and `npm run test:live` pass from a clean checkout.
+- A separately installed packaged CLI exercised the intentional three-failure demo, safe repeated-init rejection, and starter-project recovery.
+- The clean build root matches the live root by SHA-256. Existing deployment evidence records mobile Lighthouse 99 performance and 100 accessibility.
+
+No product changes were made by this verification. Registry publication remains factory-owned.
